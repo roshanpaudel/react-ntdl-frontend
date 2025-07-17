@@ -4,6 +4,7 @@ import { Table } from "./Table";
 import { HoursBanner } from "./HoursBanner";
 import { postTask } from "./helpers/apiHelper";
 import { fetchAll } from "./helpers/apiHelper";
+import { updateData } from "./helpers/apiHelper";
 
 function App() {
   const [habitData, setHabitData] = useState([]);
@@ -11,7 +12,8 @@ function App() {
   const habitRef = useRef();
   const hourRef = useRef();
   const shouldFetchRef = useRef(true); // used to overcome the double useEffect execution
-
+  let tableCountGood = 1;
+  let tableCountBad = 1;
   useEffect(() => {
     shouldFetchRef.current && getData();
     shouldFetchRef.current = false;
@@ -35,7 +37,7 @@ function App() {
   const getData = async () => {
     //call axios helper to get data from server
     const data = await fetchAll();
-
+    console.log(data.task);
     //mount that data to habitData state
     data?.status === "success" && setHabitData(data.task);
   };
@@ -45,12 +47,15 @@ function App() {
       setHabitData((prev) => prev.filter((_, index) => index !== objIndex));
     }
   };
-  const toggleBadHabit = (index) => {
-    setHabitData((prevHabitData) =>
-      prevHabitData.map((habit, i) =>
-        i === index ? { ...habit, isBadHabit: !habit.isBadHabit } : habit
-      )
-    );
+  const toggleBadHabit = async (_id, isBad) => {
+
+    const response = await updateData({ _id, isBadHabit: isBad });
+
+    setResponseBanner(response);
+    if (response.status === "success") {
+      //refetch all the task
+      getData();
+    }
   };
 
   // 👇 We use the reduce() method to go through each habit one by one
@@ -108,13 +113,14 @@ function App() {
 
                 <table className="table table-striped table-hover border">
                   {habitData.map(
-                    (habitData, index) =>
+                    (habitData) =>
                       habitData.isBadHabit === false && (
                         <Table
                           toggleBadHabit={toggleBadHabit}
                           deleteData={deleteData}
                           habitData={habitData}
-                          index={index}
+                          index={habitData._id}
+                          tableCount={tableCountGood++}
                         />
                       )
                   )}
@@ -126,13 +132,14 @@ function App() {
 
                 <table className="table table-striped table-hover border">
                   {habitData.map(
-                    (habitData, index) =>
+                    (habitData) =>
                       habitData.isBadHabit === true && (
                         <Table
                           toggleBadHabit={toggleBadHabit}
                           deleteData={deleteData}
                           habitData={habitData}
-                          index={index}
+                          index={habitData._id}
+                          tableCount={tableCountBad++}
                         />
                       )
                   )}
