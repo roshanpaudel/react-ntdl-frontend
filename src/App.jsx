@@ -1,14 +1,22 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserInput } from "./UserInput";
 import { Table } from "./Table";
 import { HoursBanner } from "./HoursBanner";
+import { postTask } from "./helpers/apiHelper";
+import { fetchAll } from "./helpers/apiHelper";
 
 function App() {
   const [habitData, setHabitData] = useState([]);
+  const [response, setResponseBanner] = useState({});
   const habitRef = useRef();
   const hourRef = useRef();
+  const shouldFetchRef = useRef(true); // used to overcome the double useEffect execution
 
-  const handleOnSubmit = (e) => {
+  useEffect(() => {
+    shouldFetchRef.current && getData();
+    shouldFetchRef.current = false;
+  }, []);
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
     const inputObj = {
       habitName: habitRef.current.value,
@@ -19,8 +27,19 @@ function App() {
       return alert("Sorry hours exceed the maximum limit for a week");
     } else {
       setHabitData((prevData) => [...prevData, inputObj]);
+      //call api to send data to database
+      const response = await postTask(inputObj);
+      setResponseBanner(response);
     }
   };
+  const getData = async () => {
+    //call axios helper to get data from server
+    const data = await fetchAll();
+
+    //mount that data to habitData state
+    data?.status === "success" && setHabitData(data.task);
+  };
+
   const deleteData = (objIndex) => {
     if (window.confirm("Are you sure you want to delete this?")) {
       setHabitData((prev) => prev.filter((_, index) => index !== objIndex));
@@ -64,6 +83,18 @@ function App() {
       <div className="wrapper pt-5">
         <div className="container">
           <h1 className="text-center">Not To Do List</h1>
+          {response?.message && response?.status && (
+            <div
+              className={
+                response.status === "success"
+                  ? "alert alert-success"
+                  : "alert alert-danger"
+              }
+            >
+              {response.message}
+            </div>
+          )}
+
           <UserInput
             habitRef={habitRef}
             hourRef={hourRef}
