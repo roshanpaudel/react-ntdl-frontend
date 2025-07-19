@@ -54,7 +54,7 @@ A responsive and beginner-friendly **Habit Tracker** web app built with **React*
 ### 🔄 Clone the Repository
 
 ```bash
-git clone https://github.com/roshanpaudel/react-not-to-do-list
+git clone https://github.com/roshanpaudel/react-ntdl-frontend
 cd react-not-to-do-list
 ```
 
