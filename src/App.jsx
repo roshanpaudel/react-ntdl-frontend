@@ -48,7 +48,6 @@ function App() {
     }
   };
   const toggleBadHabit = async (_id, isBad) => {
-
     const response = await updateData({ _id, isBadHabit: isBad });
 
     setResponseBanner(response);
@@ -109,8 +108,14 @@ function App() {
             <div className="row mt-5">
               <div className="col-md">
                 <h3 className="text-center">Entry List</h3>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value="allEntry"
+                  id="all-entry"
+                ></input>{" "}
+                <label htmlFor="allEntry">Select All</label>
                 <hr />
-
                 <table className="table table-striped table-hover border">
                   {habitData.map(
                     (habitData) =>
@@ -128,8 +133,14 @@ function App() {
               </div>
               <div className="col-md">
                 <h3 className="text-center">Bad List</h3>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value="allEntry"
+                  id="all-entry"
+                ></input>{" "}
+                <label htmlFor="allEntry">Select All</label>
                 <hr />
-
                 <table className="table table-striped table-hover border">
                   {habitData.map(
                     (habitData) =>
@@ -144,7 +155,6 @@ function App() {
                       )
                   )}
                 </table>
-
                 <HoursBanner
                   label="You could have saved "
                   displayHours={badHabitHours}
