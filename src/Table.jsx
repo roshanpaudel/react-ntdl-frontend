@@ -6,6 +6,8 @@ export const Table = ({
   toggleBadHabit,
   index,
   tableCount,
+  handleOnSelect,
+  toDelete,
 }) => {
   return (
     <>
@@ -16,8 +18,9 @@ export const Table = ({
             <input
               className="form-check-input"
               type="checkbox"
-              value=""
-              id=""
+              value={index}
+              onChange={handleOnSelect}
+              checked={toDelete.includes(index)}
             ></input>{" "}
             {habitData.habitName}
           </td>

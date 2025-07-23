@@ -12,6 +12,7 @@ function App() {
   const habitRef = useRef();
   const hourRef = useRef();
   const shouldFetchRef = useRef(true); // used to overcome the double useEffect execution
+  const [toDelete, setToDelete] = useState([]);
   let tableCountGood = 1;
   let tableCountBad = 1;
   useEffect(() => {
@@ -56,6 +57,40 @@ function App() {
       getData();
     }
   };
+
+  const handleOnSelect = (e) => {
+    const { checked, value } = e.target;
+    console.log(e);
+    console.log(checked, value);
+    let tempIds = [];
+    if (value === "allEntry") {
+      tempIds = habitData
+        .filter((item) => item.isBadHabit === false)
+        .map((item) => item._id);
+    }
+    if (value === "allBad") {
+      tempIds = habitData
+        .filter((item) => item.isBadHabit === true)
+        .map((item) => item._id);
+    }
+    if (checked) {
+      if (value === "allEntry" || value === "allBad") {
+        const uniqueIDs = [...new Set([...toDelete, ...tempIds])];
+        setToDelete(uniqueIDs);
+        return;
+      }
+
+      setToDelete([...toDelete, value]);
+    } else {
+      if (value === "allEntry" || value === "allBad") {
+        setToDelete(toDelete.filter((_id) => !tempIds.includes(_id)));
+        return;
+      }
+      setToDelete(toDelete.filter((_id) => _id !== value));
+    }
+    console.log(checked, value);
+  };
+  console.log(toDelete);
 
   // 👇 We use the reduce() method to go through each habit one by one
   // It helps us "reduce" the array into a single result (like a total count)
@@ -113,8 +148,9 @@ function App() {
                   type="checkbox"
                   value="allEntry"
                   id="all-entry"
+                  onChange={handleOnSelect}
                 ></input>{" "}
-                <label htmlFor="allEntry">Select All</label>
+                <label htmlFor="all-entry">Select All</label>
                 <hr />
                 <table className="table table-striped table-hover border">
                   {habitData.map(
@@ -126,6 +162,8 @@ function App() {
                           habitData={habitData}
                           index={habitData._id}
                           tableCount={tableCountGood++}
+                          handleOnSelect={handleOnSelect}
+                          toDelete={toDelete}
                         />
                       )
                   )}
@@ -136,10 +174,11 @@ function App() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value="allEntry"
-                  id="all-entry"
+                  value="allBad"
+                  id="all-bad"
+                  onChange={handleOnSelect}
                 ></input>{" "}
-                <label htmlFor="allEntry">Select All</label>
+                <label htmlFor="all-bad">Select All</label>
                 <hr />
                 <table className="table table-striped table-hover border">
                   {habitData.map(
@@ -151,6 +190,8 @@ function App() {
                           habitData={habitData}
                           index={habitData._id}
                           tableCount={tableCountBad++}
+                          handleOnSelect={handleOnSelect}
+                          toDelete={toDelete}
                         />
                       )
                   )}
