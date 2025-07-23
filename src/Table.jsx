@@ -1,7 +1,6 @@
 import React from "react";
 
 export const Table = ({
-  deleteData,
   habitData,
   toggleBadHabit,
   index,
@@ -34,21 +33,9 @@ export const Table = ({
                 >
                   <i class="fa-solid fa-arrow-left"></i>
                 </button>
-                <button
-                  onClick={() => deleteData(index)}
-                  class="btn btn-danger"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
               </>
             ) : (
               <>
-                <button
-                  onClick={() => deleteData(index)}
-                  class="btn btn-danger"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
                 <button
                   onClick={() => toggleBadHabit(index, true)}
                   class="btn btn-success"

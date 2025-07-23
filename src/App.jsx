@@ -43,7 +43,7 @@ function App() {
     data?.status === "success" && setHabitData(data.task);
   };
 
-  const deleteData = (objIndex) => {
+  const handleOnDelete = (idsToDelete) => {
     if (window.confirm("Are you sure you want to delete this?")) {
       setHabitData((prev) => prev.filter((_, index) => index !== objIndex));
     }
@@ -158,7 +158,6 @@ function App() {
                       habitData.isBadHabit === false && (
                         <Table
                           toggleBadHabit={toggleBadHabit}
-                          deleteData={deleteData}
                           habitData={habitData}
                           index={habitData._id}
                           tableCount={tableCountGood++}
@@ -186,7 +185,6 @@ function App() {
                       habitData.isBadHabit === true && (
                         <Table
                           toggleBadHabit={toggleBadHabit}
-                          deleteData={deleteData}
                           habitData={habitData}
                           index={habitData._id}
                           tableCount={tableCountBad++}
@@ -203,7 +201,10 @@ function App() {
               </div>
               {toDelete.length > 0 && (
                 <div className="row my-5 d-grid">
-                  <button className="btn btn-danger">
+                  <button
+                    className="btn btn-danger"
+                    onClick={handleOnDelete(toDelete)}
+                  >
                     Delete {toDelete.length} task(s)
                   </button>
                 </div>
