@@ -1,6 +1,6 @@
-# 🧠 Not To Do List (React + Vite)
+# 🧠 Not To Do List (React + Vite + Node.js + MongoDB)
 
-A responsive and beginner-friendly **Habit Tracker** web app built with **React** and **Vite**. This application allows users to manage their daily tasks and habits, helping them visualize how they allocate their time and where they can make improvements.
+A responsive and beginner-friendly **Habit Tracker** web app built with **React**, **Vite**, **Node.js**, and **MongoDB**. This full-stack application allows users to manage their daily tasks and habits, visualize time allocation, and persist data using a MongoDB backend.
 
 ---
 
@@ -24,6 +24,9 @@ A responsive and beginner-friendly **Habit Tracker** web app built with **React*
 - **🗑 Task Deletion**  
   Remove tasks from either list with confirmation to avoid accidental deletions.
 
+- **📡 Backend Integration**  
+  All task data is saved and retrieved from a **MongoDB** database using a **Node.js + Express** backend and **Axios** for HTTP communication.
+
 - **💡 Responsive UI**  
   Mobile and desktop-friendly layout powered by Bootstrap and Font Awesome.
 
@@ -31,14 +34,18 @@ A responsive and beginner-friendly **Habit Tracker** web app built with **React*
 
 ## ⚙️ Tech Stack
 
-| Technology        | Purpose                           |
-| ----------------- | --------------------------------- |
-| React (via Vite)  | UI rendering and state management |
-| HTML & CSS        | Markup and styling                |
-| Bootstrap         | Responsive layout and components  |
-| JavaScript (ES6+) | Application logic                 |
-| Font Awesome      | Iconography                       |
-| Yarn              | Dependency management             |
+| Technology        | Purpose                                  |
+| ----------------- | ---------------------------------------- |
+| React (via Vite)  | UI rendering and state management        |
+| Node.js + Express | Backend server and API routes            |
+| MongoDB           | Database for storing user tasks          |
+| Mongoose          | ODM to interact with MongoDB             |
+| Axios             | Frontend HTTP client for API calls       |
+| HTML & CSS        | Markup and styling                       |
+| Bootstrap         | Responsive layout and components         |
+| JavaScript (ES6+) | Application logic                        |
+| Font Awesome      | Iconography                              |
+| Yarn              | Dependency management                    |
 
 ---
 
@@ -47,37 +54,98 @@ A responsive and beginner-friendly **Habit Tracker** web app built with **React*
 ### 🔄 Clone the Repository
 
 ```bash
-git clone https://github.com/roshanpaudel/react-not-to-do-list
-cd not-to-do-list
-📦 Install Dependencies
-Make sure you have Yarn installed.
+git clone https://github.com/roshanpaudel/react-ntdl-frontend
+cd react-not-to-do-list
+```
 
+---
 
+### 📦 Install Dependencies
+
+#### Frontend
+
+```bash
+cd client
 yarn install
-▶️ Start the Development Server
+```
 
+#### Backend
+
+```bash
+cd ../server
+yarn install
+```
+
+---
+
+### ⚙️ Set Up Environment Variables
+
+Create a `.env` file inside the `server/` folder with:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+```
+
+---
+
+### ▶️ Start the Application
+
+#### Start Backend Server
+
+```bash
+cd server
+yarn start
+```
+
+#### Start Frontend Dev Server
+
+In a separate terminal:
+
+```bash
+cd client
 yarn dev
-Then open your browser at:
-📍 http://localhost:5173/
+```
 
-🔧 Project Structure
+Open your browser at:
 
-not-to-do-list/
-├── public/                   # Static assets
-│   └── favicon.ico
-├── src/
-│   ├── assets/               # Reusable React components (TaskList, HabitList, Form, etc.)
-│   ├── App.jsx               # Main application component
-│   ├── HoursBanner.jsx       # Banner card component
-│   ├── main.jsx              # Entry point for React via Vite
-│   ├── Table.jsx             # Table to display habits component
-│   └── UserInput.jsx         #User input component
+📍 `http://localhost:5173/`
+
+---
+
+## 🏗 Project Structure
+
+```
+react-not-to-do-list/
+├── client/                      # Frontend (React + Vite)
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │   ├── Table.jsx
+│   │   │   ├── UserInput.jsx
+│   │   │   └── HoursBanner.jsx
+│   │   └── api/
+│   │       └── taskApi.js       # Axios calls to backend
+│   └── index.html
+│   └── vite.config.js
 │
-├── index.html                # Base HTML template
-├── package.json              # Project metadata and scripts
-├── vite.config.js            # Vite configuration
+├── server/                      # Backend (Node.js + Express + MongoDB)
+│   ├── models/
+│   │   └── TaskModel.js
+│   ├── routes/
+│   │   └── taskRoutes.js
+│   ├── controllers/
+│   │   └── taskController.js
+│   ├── server.js
+│   └── .env
+│
+├── package.json                 # Root-level metadata
 └── README.md
 ```
+
+---
 
 ## 📚 How to Use the App
 
@@ -111,6 +179,17 @@ not-to-do-list/
 
 ---
 
+## 🧠 Backend API Overview
+
+| Endpoint           | Method | Description                       |
+| ------------------|--------|-----------------------------------|
+| `/api/tasks`       | GET    | Fetch all tasks                   |
+| `/api/tasks`       | POST   | Add a new task                    |
+| `/api/tasks/:id`   | PATCH  | Update task (e.g., switch lists)  |
+| `/api/tasks/:id`   | DELETE | Delete a task                     |
+
+---
+
 ## 🎨 Styling & Design
 
 - **Bootstrap** is used for layout and responsive design.
@@ -131,12 +210,24 @@ not-to-do-list/
 
 ## 🌐 Deployment Tips
 
-To deploy this app (e.g., on **Netlify**, **Vercel**, or **GitHub Pages**):
+To deploy this app:
 
-1. Run `yarn build`
-2. Upload the `dist/` folder to your chosen hosting service
+### Frontend (Client)
 
-Or use **Vercel CLI** / **Netlify CLI** for continuous deployment.
+1. Build using `yarn build`
+2. Deploy the `client/dist/` folder on Netlify, Vercel, or GitHub Pages
+
+### Backend (Server)
+
+- Deploy the backend (Node.js server) using:
+  - [Render](https://render.com/)
+  - [Railway](https://railway.app/)
+  - [Fly.io](https://fly.io/)
+  - [Heroku (if still available)](https://www.heroku.com)
+
+Make sure to:
+- Add your MongoDB URI and set the CORS origin for frontend
+- Configure environment variables properly
 
 ---
 
@@ -149,11 +240,14 @@ You are free to use, modify, and distribute it.
 
 ## 🙏 Acknowledgements
 
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [Express.js](https://expressjs.com/)
+- [MongoDB](https://mongodb.com/)
+- [Axios](https://axios-http.com/)
 - [Bootstrap](https://getbootstrap.com/)
 - [Font Awesome](https://fontawesome.com/)
-- [Vite](https://vitejs.dev/)
-- [React](https://react.dev/)
 
 ---
 
-> ✨ _Made with React and a little bit of discipline. Happy habit tracking!_
+> ✨ _Made with React, Node.js, and a little bit of discipline. Happy habit tracking!_
