@@ -43,7 +43,7 @@ export const updateData = async (data) => {
 export const deleteTasksByIds = async (data) => {
   const obj = {
     method: "delete",
-    data: {ids: data },
+    data,
   };
   return apiProcessor(obj);
 };

@@ -14,6 +14,8 @@ function App() {
   const hourRef = useRef();
   const shouldFetchRef = useRef(true); // used to overcome the double useEffect execution
   const [toDelete, setToDelete] = useState([]);
+  const [checkControlEntry, setCheckControlEntry] = useState(false);
+  const [checkControlBad, setCheckControlBad] = useState(false);
   let tableCountGood = 1;
   let tableCountBad = 1;
   useEffect(() => {
@@ -68,15 +70,16 @@ function App() {
 
   const handleOnSelect = (e) => {
     const { checked, value } = e.target;
-    console.log(e);
-    console.log(checked, value);
+
     let tempIds = [];
     if (value === "allEntry") {
+      setCheckControlEntry(e.target.checked);
       tempIds = habitData
         .filter((item) => item.isBadHabit === false)
         .map((item) => item._id);
     }
     if (value === "allBad") {
+      setCheckControlBad(e.target.checked);
       tempIds = habitData
         .filter((item) => item.isBadHabit === true)
         .map((item) => item._id);
@@ -157,6 +160,7 @@ function App() {
                   value="allEntry"
                   id="all-entry"
                   onChange={handleOnSelect}
+                  checked={checkControlEntry}
                 ></input>{" "}
                 <label htmlFor="all-entry">Select All</label>
                 <hr />
@@ -184,6 +188,7 @@ function App() {
                   value="allBad"
                   id="all-bad"
                   onChange={handleOnSelect}
+                  checked={checkControlBad}
                 ></input>{" "}
                 <label htmlFor="all-bad">Select All</label>
                 <hr />
