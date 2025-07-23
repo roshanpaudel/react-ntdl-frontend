@@ -6,6 +6,7 @@ const apiProcessor = async ({ method, data }) => {
       method: method,
       url: apiEP,
       data,
+      headers: { "Content-Type": "application/json" },
     });
     return response.data;
   } catch (error) {
@@ -35,6 +36,14 @@ export const updateData = async (data) => {
   const obj = {
     method: "patch",
     data,
+  };
+  return apiProcessor(obj);
+};
+
+export const deleteTasksByIds = async (data) => {
+  const obj = {
+    method: "delete",
+    data: {ids: data },
   };
   return apiProcessor(obj);
 };

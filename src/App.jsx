@@ -5,6 +5,7 @@ import { HoursBanner } from "./HoursBanner";
 import { postTask } from "./helpers/apiHelper";
 import { fetchAll } from "./helpers/apiHelper";
 import { updateData } from "./helpers/apiHelper";
+import { deleteTasksByIds } from "./helpers/apiHelper";
 
 function App() {
   const [habitData, setHabitData] = useState([]);
@@ -33,6 +34,7 @@ function App() {
       //call api to send data to database
       const response = await postTask(inputObj);
       setResponseBanner(response);
+      getData();
     }
   };
   const getData = async () => {
@@ -43,9 +45,15 @@ function App() {
     data?.status === "success" && setHabitData(data.task);
   };
 
-  const handleOnDelete = (idsToDelete) => {
+  const handleOnDelete = async (idsToDelete) => {
     if (window.confirm("Are you sure you want to delete this?")) {
-      setHabitData((prev) => prev.filter((_, index) => index !== objIndex));
+      //setHabitData((prev) => prev.filter((_, index) => index !== objIndex));
+      const response = await deleteTasksByIds(idsToDelete);
+      if (response.status === "success") {
+        //refetch all the task
+        getData();
+        setToDelete([]);
+      }
     }
   };
   const toggleBadHabit = async (_id, isBad) => {
@@ -203,7 +211,7 @@ function App() {
                 <div className="row my-5 d-grid">
                   <button
                     className="btn btn-danger"
-                    onClick={handleOnDelete(toDelete)}
+                    onClick={() => handleOnDelete(toDelete)}
                   >
                     Delete {toDelete.length} task(s)
                   </button>
