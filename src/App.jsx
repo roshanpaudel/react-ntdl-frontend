@@ -73,30 +73,44 @@ function App() {
 
     let tempIds = [];
     if (value === "allEntry") {
-      setCheckControlEntry(e.target.checked);
       tempIds = habitData
         .filter((item) => item.isBadHabit === false)
         .map((item) => item._id);
     }
     if (value === "allBad") {
-      setCheckControlBad(e.target.checked);
       tempIds = habitData
         .filter((item) => item.isBadHabit === true)
         .map((item) => item._id);
     }
     if (checked) {
-      if (value === "allEntry" || value === "allBad") {
+      if (value === "allEntry") {
         const uniqueIDs = [...new Set([...toDelete, ...tempIds])];
         setToDelete(uniqueIDs);
+        setCheckControlEntry(true);
+        return;
+      }
+      if (value === "allBad") {
+        const uniqueIDs = [...new Set([...toDelete, ...tempIds])];
+        setToDelete(uniqueIDs);
+        setCheckControlBad(true);
         return;
       }
 
       setToDelete([...toDelete, value]);
     } else {
-      if (value === "allEntry" || value === "allBad") {
+      if (value === "allEntry") {
         setToDelete(toDelete.filter((_id) => !tempIds.includes(_id)));
+        setCheckControlEntry(false);
         return;
       }
+      if (value === "allBad") {
+        setToDelete(toDelete.filter((_id) => !tempIds.includes(_id)));
+        setCheckControlBad(false);
+        return;
+      }
+      habitData.find((item) => item._id === value).isBadHabit
+        ? setCheckControlBad(false)
+        : setCheckControlEntry(false);
       setToDelete(toDelete.filter((_id) => _id !== value));
     }
     console.log(checked, value);
