@@ -201,6 +201,14 @@ function App() {
                   displayHours={badHabitHours}
                 />
               </div>
+              {toDelete.length > 0 && (
+                <div className="row my-5 d-grid">
+                  <button className="btn btn-danger">
+                    Delete {toDelete.length} task(s)
+                  </button>
+                </div>
+              )}
+
               <HoursBanner
                 label="Total hours allocated is "
                 displayHours={totalHours}
